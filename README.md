@@ -1,6 +1,6 @@
 # Tricho 🕷
 
-Helpers functions to develop web with 4D
+Helpers functions for web
 
 ## Utility methods
 
@@ -82,7 +82,7 @@ then in HTTP client, you could access the resource using path `/employee/12`
 A class must conform to some parameters and functions, then you can register as follow
 
 ```4d
-$rooter.register(cs.YourRoute.new()) 
+$router.register(cs.YourRoute.new()) 
 ```
 
 The class must defined the `path` and `methods` attributes.
