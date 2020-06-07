@@ -20,11 +20,80 @@ Mainly wrapper to use `C_OBJECT`
 - WebSendObject: send object or collection as JSON text (using `JSON Stringify`)
 - WebSendFile: send a `File`
 
+## Router
+
+A router allow you define entry point to respond to HTTP request.
+
+### Create the rooter and add "route(s)"
+```4d
+$router:=tricho .router()
+$router.get("/hello";"Hello world")
+```
+### Handle request
+
+In  `On Web Connection`
+
+```4d
+$router.handle($1;$2;$3;$4;$5;$6)
+```
+
+### Register routes
+
+#### Choose the HTTP method
+
+You can choose one http method(GET, POST, PUT, ...) or all methods
+```
+$router.get("/hello";"This is a GET")
+$router.post("/hello";"This is a POST")
+$router.all("/hello";Formula("This is a "+$1.method))
+```
+#### Providing data or code to execute
+
+Last parameters is the data to return to HTTP client.
+
+If you use a formula, the code could be dynamic and call an other methods.
+
+If you return 
+- an object or a collection, it will be JSON stringifyed
+- a `File`, it will be send as blob (or according to file extension)
+
+#### Have parameters in route
+
+You can define parameters in route using `:`, for instance to get the employee id
+
+```
+$router.get("/employee/:id";Formula(ProceedEmployeeData($1.params.id)))
+```
+
+#### Using a class (advanced use)
+
+A class must conform to some parameters and functions, then you can register as follow
+
+```4d
+$rooter.register(cs.YourRoute.new()) 
+```
+
+The class must defined the `path` and `methods` attributes.
+
+```4d
+Class constructor
+	This.methods:=New collection(HTTPMethod .GET)
+	This.path:="/a/class/path"
+```
+
+and must define a function to return the data.
+
+```4d
+Function respond
+	C_VARIANT($0)
+	$0:="Hello" // Return a String, an Object(JSON), 4D.File...
+```
+
 ## Handler
 
-`Handler` allow to register multiple other methods in `On Web Connection` to split and factorize your code.
+`Handler` is an alternative to `Router`; it allow to register other methods to split and factorize your code used in `On Web Connection`
 
-According to the request context (path, HTTP method, parameters) the handler must handle or not the request.
+According to the request context (path, HTTP method, parameters) the handler must handle or not the request. If one handler respond, we stop.
 
 ### First create the handler
 
@@ -52,7 +121,7 @@ Function handle
     WEB SEND TEXT(String(Day number(Current date)))
     $0:=True // handled
   Else
-    $0:=False // ignoe request
+    $0:=False // ignore request
   End if
 ```
 
