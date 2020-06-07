@@ -1,4 +1,4 @@
-//%attributes = {}
+//%attributes = {"shared":true,"preemptive":"capable"}
 C_OBJECT:C1216($1)
 ARRAY TEXT:C222($anames;0)
 ARRAY TEXT:C222($avalues;0)

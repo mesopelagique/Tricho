@@ -1,14 +1,8 @@
+
+
 Class constructor
-	C_VARIANT:C1683($1)
-	If (Value type:C1509($1)=Is collection:K8:32)
-		This:C1470.methods:=$1
-	Else 
-		This:C1470.methods:=New collection:C1472(String:C10($1))
-	End if 
-	C_TEXT:C284($2)
-	This:C1470.path:=$2
-	C_VARIANT:C1683($3)
-	This:C1470.formula:=$3
+	This:C1470.methods:=New collection:C1472(HTTPMethod .GET)
+	This:C1470.path:="/readme"
 	
 Function respond
 	C_VARIANT:C1683($0;$response)
@@ -21,4 +15,4 @@ Function respond
 		End if 
 	End if 
 	
-	$0:=$response
+	$0:=Folder:C1567(fk database folder:K87:14).file("README.md")

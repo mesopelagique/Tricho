@@ -15,18 +15,31 @@
 			"Handler"
 		]
 	},
+	"HTTP": {
+		"methods": [
+			"HTTPMethod"
+		],
+		"classes": [
+			"Context",
+			"Response"
+		]
+	},
 	"Router": {
+		"methods": [
+			"test_router"
+		],
 		"classes": [
 			"_FormulaRoute",
+			"_TestRouter",
 			"Router"
 		]
 	},
 	"Web": {
 		"methods": [
-			"HTTPMethod",
 			"WebGetHTTPHeaders",
 			"WebGetVariables",
 			"WebSendFile",
+			"WebSendFolderIndex",
 			"WebSendObject",
 			"WebSetHTTPHeaders"
 		]

@@ -1,0 +1,15 @@
+
+
+###
+GET http://localhost:8087/hello
+
+###
+GET http://localhost:8087/hello/formula
+
+###
+GET http://localhost:8087/date/today
+###
+POST http://localhost:8087/date/today
+
+###
+POST http://localhost:8087/employee/45
