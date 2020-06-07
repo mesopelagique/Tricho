@@ -58,7 +58,10 @@ $router.all("/hello";Formula("This is a "+$1.method))
 
 Last parameters is the data to return to the HTTP client.
 
-If you use a formula, the code could be dynamic and call an other methods.
+If you use a formula, 
+- the code could be dynamic ie. executed each times
+- you can call an other methods to manage response
+- you receive a context/request object with some useful features (to get headers, variables, ...)
 
 If you return 
 - an object or a collection, it will be JSON stringifyed
