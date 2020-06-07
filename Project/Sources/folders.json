@@ -9,11 +9,17 @@
 			"Handler"
 		]
 	},
-	"Router": {},
+	"Router": {
+		"classes": [
+			"Router",
+			"SimpleRoute"
+		]
+	},
 	"Web": {
 		"methods": [
 			"WebGetHTTPHeaders",
 			"WebGetVariables",
+			"WebSendFile",
 			"WebSendObject",
 			"WebSetHTTPHeaders"
 		]

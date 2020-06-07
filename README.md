@@ -6,7 +6,7 @@ Helpers functions to develop web with 4D
 
 Mainly wrapper to use `C_OBJECT`
 
-### Headers
+### HTTP Headers
 
 - WebGetHTTPHeaders
 - WebSetHTTPHeaders
@@ -15,9 +15,10 @@ Mainly wrapper to use `C_OBJECT`
 
 - WebGetVariables: return an object of variables
 
-### Sends
+### Respond
 
-- WebSendObject: send object as JSON text
+- WebSendObject: send object or collection as JSON text (using `JSON Stringify`)
+- WebSendFile: send a `File`
 
 ## Handler
 
