@@ -24,6 +24,7 @@ Function handle
 	$context:=cs:C1710.Context.new($1;$2;$3;$4;$5;$6)
 	
 	$handled:=False:C215
+	C_OBJECT:C1216($handler)
 	For each ($handler;This:C1470.handlers) Until ($handled)
 		If ($handler.accept#Null:C1517)
 			If ($handler.accept($context))

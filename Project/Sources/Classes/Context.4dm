@@ -27,7 +27,7 @@ See WEB GET HTTP HEADER.
 Function headers
 	  // alt: parse raw http if defined?
 	C_OBJECT:C1216($0)
-	$0:=WebGetHeaders 
+	$0:=WebGetHTTPHeaders 
 	
 Function bodyText
 	C_TEXT:C284($0;$request)

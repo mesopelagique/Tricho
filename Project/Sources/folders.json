@@ -1,4 +1,10 @@
 ﻿{
+	"Compiler": {
+		"methods": [
+			"Compiler_Methods",
+			"Compiler_Variables"
+		]
+	},
 	"Handler": {
 		"methods": [
 			"test_Handler"
@@ -11,12 +17,13 @@
 	},
 	"Router": {
 		"classes": [
-			"Router",
-			"SimpleRoute"
+			"_FormulaRoute",
+			"Router"
 		]
 	},
 	"Web": {
 		"methods": [
+			"HTTPMethod",
 			"WebGetHTTPHeaders",
 			"WebGetVariables",
 			"WebSendFile",
