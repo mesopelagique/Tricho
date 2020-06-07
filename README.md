@@ -24,7 +24,7 @@ Mainly wrapper to use `C_OBJECT`
 
 A router allow you define entry points to respond to HTTP requests.
 
-Typically you provide the URL path, the HTTP method and the code to execute.
+Typically you provide the URL path, the HTTP method and the code to execute when matching.
 
 ### Create the rooter and add "route(s)"
 
@@ -134,7 +134,7 @@ Function handle
   End if
 ```
 
-### Finnaly handle request
+### Finally handle request
 
 In  `On Web Connection`
 
@@ -145,3 +145,13 @@ Else
   // other code like http 404 if not handled
 End if
 ```
+
+## Ackowledgments
+
+Router is inspired by numerous packages of different languages such as Flask for python, express for javascript, etc...
+
+## Info
+
+- Name come from [Trichobothria](https://en.m.wikipedia.org/wiki/Trichobothria)
+
+
