@@ -22,7 +22,7 @@ Mainly wrapper to use `C_OBJECT`
 
 ## Router
 
-A router allow you define entry point to respond to HTTP request.
+A router allow you define entry points to respond to HTTP requests.
 
 Typically you provide the URL path, the HTTP method and the code to execute.
 
