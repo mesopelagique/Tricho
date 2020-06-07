@@ -24,14 +24,19 @@ Mainly wrapper to use `C_OBJECT`
 
 A router allow you define entry point to respond to HTTP request.
 
+Typically you provide the URL path, the HTTP method and the code to execute.
+
 ### Create the rooter and add "route(s)"
+
 ```4d
 $router:=tricho .router()
 $router.get("/hello";"Hello world")
+...
 ```
+
 ### Handle request
 
-In  `On Web Connection`
+In `On Web Connection` you could handle all request using code:
 
 ```4d
 $router.handle($1;$2;$3;$4;$5;$6)
@@ -42,14 +47,16 @@ $router.handle($1;$2;$3;$4;$5;$6)
 #### Choose the HTTP method
 
 You can choose one http method(GET, POST, PUT, ...) or all methods
+
 ```
 $router.get("/hello";"This is a GET")
 $router.post("/hello";"This is a POST")
 $router.all("/hello";Formula("This is a "+$1.method))
 ```
+
 #### Providing data or code to execute
 
-Last parameters is the data to return to HTTP client.
+Last parameters is the data to return to the HTTP client.
 
 If you use a formula, the code could be dynamic and call an other methods.
 
@@ -64,6 +71,8 @@ You can define parameters in route using `:`, for instance to get the employee i
 ```
 $router.get("/employee/:id";Formula(ProceedEmployeeData($1.params.id)))
 ```
+
+then in HTTP client, you could access the resource using path `/employee/12`
 
 #### Using a class (advanced use)
 
