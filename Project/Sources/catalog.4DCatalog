@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE base SYSTEM "http://www.4d.com/dtd/2007/base.dtd" >
+<base name="Tricho" uuid="A9A2E8F38FAF4B11A5656E33A5F26064" collation_locale="en-gb">
+	<schema name="DEFAULT_SCHEMA"/>
+	<base_extra __stringCompHash="icu:63.1.0" __keywordBuildingHash="icu:63.1.0"/>
+</base>

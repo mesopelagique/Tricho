@@ -1,0 +1,22 @@
+﻿{
+	"Handler": {
+		"methods": [
+			"test_Handler"
+		],
+		"classes": [
+			"_FormulaHandler",
+			"_TestHandler",
+			"Handler"
+		]
+	},
+	"Router": {},
+	"Web": {
+		"methods": [
+			"WebGetHTTPHeaders",
+			"WebGetVariables",
+			"WebSendObject",
+			"WebSetHTTPHeaders"
+		]
+	},
+	"trash": {}
+}
