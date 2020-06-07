@@ -48,7 +48,7 @@ $router.handle($1;$2;$3;$4;$5;$6)
 
 You can choose one http method(GET, POST, PUT, ...) or all methods
 
-```
+```4d
 $router.get("/hello";"This is a GET")
 $router.post("/hello";"This is a POST")
 $router.all("/hello";Formula("This is a "+$1.method))
@@ -68,7 +68,7 @@ If you return
 
 You can define parameters in route using `:`, for instance to get the employee id
 
-```
+```4d
 $router.get("/employee/:id";Formula(ProceedEmployeeData($1.params.id)))
 ```
 
