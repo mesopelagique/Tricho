@@ -30,7 +30,7 @@
 		],
 		"classes": [
 			"_FormulaRoute",
-			"_TestRouter",
+			"_TestRoute",
 			"Router"
 		]
 	},

@@ -32,13 +32,16 @@ Function all
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod .ALL;$1;$2))
 	
+/*
+Register a route
+*/
 Function register
 	C_OBJECT:C1216($1)
 	C_OBJECT:C1216($pool)
 	$pool:=This:C1470.routes
 	C_TEXT:C284($route)
 	$route:=$1.path
-	If (Position:C15("/";$1.path)#1)
+	If (Position:C15("/";$route)#1)
 		$route:="/"+$route
 	End if 
 	
@@ -55,12 +58,94 @@ Function register
 		End if 
 		$pool:=$pool[$r]
 	End for each 
+	C_COLLECTION:C1488($methods)
+	$methods:=$1.methods
+	If ($methods=Null:C1517)
+		If (OB Instance of:C1731($1.all;4D:C1709.Function))
+			$methods:=HTTPMethod .ALL  // XXX maybe do a copy to avoid change
+		Else 
+			$methods:=New collection:C1472()
+			If (OB Instance of:C1731($1.get;4D:C1709.Function))
+				$methods.push(HTTPMethod .GET)
+			End if 
+			If (OB Instance of:C1731($1.post;4D:C1709.Function))
+				$methods.push(HTTPMethod .POST)
+			End if 
+			If (OB Instance of:C1731($1.put;4D:C1709.Function))
+				$methods.push(HTTPMethod .PUT)
+			End if 
+			If (OB Instance of:C1731($1.delete;4D:C1709.Function))
+				$methods.push(HTTPMethod .DELETE)
+			End if 
+			If (OB Instance of:C1731($1.delete;4D:C1709.Function))
+				$methods.push(HTTPMethod .PATCH)
+			End if 
+			If (OB Instance of:C1731($1.head;4D:C1709.Function))
+				$methods.push(HTTPMethod .HEAD)
+			End if 
+			If (OB Instance of:C1731($1.options;4D:C1709.Function))
+				$methods.push(HTTPMethod .OPTIONS)
+			End if 
+		End if 
+		
+	End if 
 	
-	For each ($method;$1.methods)
+	For each ($method;$methods)
 		$pool["__"+$method+"__"]:=$1
 	End for each 
 	
+/*
+Unregister a route, using object(path, methods) or path
+*/
+Function unregister
+	C_VARIANT:C1683($1)
+	C_COLLECTION:C1488($2;$methods)
+	C_TEXT:C284($route)
+	If (Value type:C1509($1)=Is object:K8:27)
+		$route:=$1.path
+	Else 
+		$route:=String:C10($1)  // failed is not convertible
+	End if 
 	
+	If (Position:C15("/";$route)#1)
+		$route:="/"+$route
+	End if 
+	C_COLLECTION:C1488($routes)
+	$routes:=Split string:C1554($route;"/")
+	
+	C_OBJECT:C1216($pool)
+	$pool:=This:C1470.routes
+	C_TEXT:C284($method;$r)
+	For each ($r;$routes) Until ($pool=Null:C1517)
+		If (Position:C15(":";$r)=1)
+			$r:=":"
+		End if 
+		
+		If ($pool[$r]#Null:C1517)
+			$pool:=$pool[$r]
+		Else 
+			$pool:=Null:C1517  // break
+		End if 
+	End for each 
+	
+	If ($pool#Null:C1517)
+		If (Value type:C1509($1)=Is object:K8:27)
+			$methods:=$1.methods
+		End if 
+		If (Count parameters:C259>1)
+			$methods:=$2
+		End if 
+		If ($methods=Null:C1517)
+			$methods:=HTTPMethod .ALL
+		End if 
+		For each ($method;$methods)
+			OB REMOVE:C1226($pool;"__"+$method+"__")
+		End for each 
+	End if 
+	
+/*
+find a route according to context object
+*/
 Function _routeForContext
 	C_OBJECT:C1216($0)  // root
 	C_OBJECT:C1216($1)  // context
@@ -89,6 +174,9 @@ Function _routeForContext
 		  //End if
 	End if 
 	
+/*
+Handle the request data. same parameters as on web connexion
+*/
 Function handle
 	C_BOOLEAN:C305($0;$handled)
 	C_TEXT:C284($1;$2;$3;$4;$5;$6)
@@ -103,7 +191,13 @@ Function handle
 		$context.params:=This:C1470._extractParams($context.path;$route.path)  //OPTI: do it only if there is var in root
 		
 		C_VARIANT:C1683($response)
-		$response:=$route.respond($context)
+		If ($route.respond=Null:C1517)
+			If ($route[Lowercase:C14($context.method)]#Null:C1517)
+				$response:=$route[Lowercase:C14($context.method)]($context)
+			End if 
+		Else 
+			$response:=$route.respond($context)
+		End if 
 		
 		Case of 
 			: (Value type:C1509($response)#Is object:K8:27)
@@ -120,6 +214,9 @@ Function handle
 	
 	$0:=$handled
 	
+/*
+private: extract parameters from two path
+*/
 Function _extractParams
 	C_OBJECT:C1216($0;$result)
 	C_TEXT:C284($1;$2;$el)

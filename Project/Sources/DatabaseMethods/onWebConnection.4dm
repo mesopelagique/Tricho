@@ -11,7 +11,7 @@ $router.get("/index/";Folder:C1567(fk database folder:K87:14).folder("WebFolder"
 
   // $router.get("/webfolder/:path";Formula(Folder(fk database folder).folder("WebFolder").folder($1.params.path)))
 
-$router.register(cs:C1710._TestRouter.new())
+$router.register(cs:C1710._TestRoute.new())
 
 
 $router.handle($1;$2;$3;$4;$5;$6)

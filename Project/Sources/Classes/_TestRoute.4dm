@@ -7,12 +7,11 @@ Class constructor
 Function respond
 	C_VARIANT:C1683($0;$response)
 	C_OBJECT:C1216($1)
+	This:C1470.cmd:=Current method name:C684
+	$0:=Folder:C1567(fk database folder:K87:14).file("README.md")
 	
-	$response:=This:C1470.formula
-	If (Value type:C1509($response)=Is object:K8:27)
-		If (OB Instance of:C1731($response;4D:C1709.Function))
-			$response:=$response.call(This:C1470;$1)
-		End if 
-	End if 
-	
+Function get
+	C_VARIANT:C1683($0;$response)
+	C_OBJECT:C1216($1)
+	This:C1470.cmd:=Current method name:C684
 	$0:=Folder:C1567(fk database folder:K87:14).file("README.md")
