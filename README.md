@@ -98,7 +98,18 @@ and must define a function to return the data.
 ```4d
 Function respond
 	C_VARIANT($0)
+	C_OBJECT($1) // $context
 	$0:="Hello" // Return a String, an Object(JSON), 4D.File...
+```
+
+alteratively you can defined function by HTTP method if you do not defined `methods` attribute
+
+```4d
+Function get
+	$0:="Hello"
+
+Function post
+	$0:=New object("success";True)
 ```
 
 ## Handler
