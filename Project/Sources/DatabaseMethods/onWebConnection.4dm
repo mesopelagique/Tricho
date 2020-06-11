@@ -13,5 +13,18 @@ $router.get("/index/";Folder:C1567(fk database folder:K87:14).folder("WebFolder"
 
 $router.register(cs:C1710._TestRoute.new())
 
+$router.all("/method";Formula:C1597("This is a "+$1.method))
+
+$router.all("/context";Formula:C1597($1))
+$router.all("/headers";Formula:C1597($1.headers()))
+$router.all("/var";Formula:C1597($1.variables()))
+
+/*$childRooter:=tricho .router()
+$childRooter.get("/hello";"Hello child")
+$childRooter.get("/sub/hello";"Hello sub child")
+$childRooter.path:="/child"
+
+$router.register($childRooter)
+*/
 
 $router.handle($1;$2;$3;$4;$5;$6)

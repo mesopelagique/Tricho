@@ -1,15 +1,34 @@
-
-
-###
-GET http://localhost:8087/hello
-
-###
-GET http://localhost:8087/hello/formula
+@hostname=localhost
+@port=8087
+@baseURL=http://{{hostname}}:{{port}}
 
 ###
-GET http://localhost:8087/date/today
-###
-POST http://localhost:8087/date/today
+GET {{baseURL}}/hello
 
 ###
-POST http://localhost:8087/employee/45
+GET {{baseURL}}/hello/formula
+
+###
+GET {{baseURL}}/date/today
+###
+POST {{baseURL}}/date/today
+
+###
+POST {{baseURL}}/employee/45
+
+###
+GET {{baseURL}}/method
+###
+POST {{baseURL}}/method
+###
+PUT {{baseURL}}/method
+###
+DELETE {{baseURL}}/method
+###
+GET {{baseURL}}/context
+###
+GET {{baseURL}}/headers
+###
+GET {{baseURL}}/var?foo=1&foo=2&test&tata=toto
+###
+GET {{baseURL}}/var#frag/test
