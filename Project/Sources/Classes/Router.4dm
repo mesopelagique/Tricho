@@ -1,6 +1,7 @@
 
 Class constructor
 	This:C1470.routes:=New object:C1471()
+	This:C1470.methods:=New collection:C1472()
 	
 Function get
 	C_TEXT:C284($1)  // path
@@ -92,6 +93,10 @@ Function register
 	
 	For each ($method;$methods)
 		$pool["__"+$method+"__"]:=$1
+		
+		If (This:C1470.methods.indexOf($method)<0)
+			This:C1470.methods.push($method)
+		End if 
 	End for each 
 	
 /*
@@ -143,10 +148,7 @@ Function unregister
 		End for each 
 	End if 
 	
-/*
-find a route according to context object
-*/
-Function _routeForContext
+Function _poolForContext
 	C_OBJECT:C1216($0)  // root
 	C_OBJECT:C1216($1)  // context
 	
@@ -163,10 +165,23 @@ Function _routeForContext
 				$pool:=$pool[$p]
 			: ($pool[":"]#Null:C1517)  // manage var
 				$pool:=$pool[":"]
+			: (OB Instance of:C1731($pool["__"+$1.method+"__"];cs:C1710.Router))  // manage var
+				$pool:=$pool["__"+$1.method+"__"]._poolForContext($1.popClone())
 			Else 
 				$pool:=Null:C1517
 		End case 
 	End for each 
+	
+	$0:=$pool
+	
+/*
+find a route according to context object
+*/
+Function _routeForContext
+	C_OBJECT:C1216($0)  // root
+	C_OBJECT:C1216($1)  // context
+	C_OBJECT:C1216($pool)
+	$pool:=This:C1470._poolForContext($1)
 	
 	If ($pool#Null:C1517)
 		  //If ($pool["__"+$1.method+"__"]#Null)
@@ -178,13 +193,18 @@ Function _routeForContext
 Handle the request data. same parameters as on web connexion
 */
 Function handle
-	C_BOOLEAN:C305($0;$handled)
+	C_BOOLEAN:C305($0)
 	C_TEXT:C284($1;$2;$3;$4;$5;$6)
 	
 	C_OBJECT:C1216($context)
 	$context:=cs:C1710.Context.new($1;$2;$3;$4;$5;$6)
+	$0:=This:C1470._handleContext($context)
 	
+Function _handleContext
+	C_BOOLEAN:C305($0;$handled)
+	C_OBJECT:C1216($1;$context)
 	$handled:=False:C215
+	$context:=$1
 	C_OBJECT:C1216($route)
 	$route:=This:C1470._routeForContext($context)
 	If ($route#Null:C1517)
@@ -237,3 +257,8 @@ Function _extractParams
 	
 	$0:=$result
 	
+Function respond
+	C_VARIANT:C1683($0;$response)
+	C_OBJECT:C1216($1)
+	
+	$0:=This:C1470.handleContext($1.popClone())
