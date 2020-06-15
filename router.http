@@ -32,3 +32,11 @@ GET {{baseURL}}/headers
 GET {{baseURL}}/var?foo=1&foo=2&test&tata=toto
 ###
 GET {{baseURL}}/var#frag/test
+###
+GET {{baseURL}}/redirect
+###
+GET {{baseURL}}/404
+###
+GET {{baseURL}}/404JSON
+###
+POST {{baseURL}}/headerSup

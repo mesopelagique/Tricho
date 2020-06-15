@@ -19,6 +19,12 @@ $router.all("/context";Formula:C1597($1))
 $router.all("/headers";Formula:C1597($1.headers()))
 $router.all("/var";Formula:C1597($1.variables()))
 
+
+$router.all("/404";Formula:C1597($2.respond(404;"dimension 404")))
+$router.all("/404JSON";Formula:C1597($2.respond(404;New object:C1471("error";"lost?"))))
+$router.all("/redirect";Formula:C1597($2.redirect("https://4d.com")))
+$router.post("/headerSup";Formula:C1597($2.respond(201;"created";New object:C1471("ID";Generate UUID:C1066))))
+
 /*$childRooter:=tricho .router()
 $childRooter.get("/hello";"Hello child")
 $childRooter.get("/sub/hello";"Hello sub child")

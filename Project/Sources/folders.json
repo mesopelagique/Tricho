@@ -21,7 +21,8 @@
 		],
 		"classes": [
 			"Context",
-			"Response"
+			"Response",
+			"ResponseRedirect"
 		]
 	},
 	"Router": {

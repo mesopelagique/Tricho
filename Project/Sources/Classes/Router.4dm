@@ -2,6 +2,7 @@
 Class constructor
 	This:C1470.routes:=New object:C1471()
 	This:C1470.methods:=New collection:C1472()
+	This:C1470.errorHandlers:=New object:C1471()  // errorcode: route
 	
 Function get
 	C_TEXT:C284($1)  // path
@@ -187,7 +188,26 @@ Function _routeForContext
 		  //If ($pool["__"+$1.method+"__"]#Null)
 		$0:=$pool["__"+$1.method+"__"]
 		  //End if
+		
+	Else 
+		$0:=This:C1470.errorHandlers["404"]  // if no route, 404 handler if defined
 	End if 
+	
+/*
+Function errorHandler
+C_LONGINT($1)
+C_VARIANT($2)
+	
+If(Value type($2)=Is object)
+	
+If(OB Instance of($2;4D.Function))
+This.errorHandlers[String($1)]:=cs._FormulaRoute.new(HTTPMethod .ALL;$2)
+Else 
+This.errorHandlers[String($1)]:=cs._FormulaRoute.new(HTTPMethod .ALL;$1;$2)
+End if
+Else 
+	
+End if */
 	
 /*
 Handle the request data. same parameters as on web connexion
@@ -207,16 +227,17 @@ Function _handleContext
 	$context:=$1
 	C_OBJECT:C1216($route)
 	$route:=This:C1470._routeForContext($context)
+
 	If ($route#Null:C1517)
 		$context.params:=This:C1470._extractParams($context.path;$route.path)  //OPTI: do it only if there is var in root
 		
 		C_VARIANT:C1683($response)
 		If ($route.respond=Null:C1517)
 			If ($route[Lowercase:C14($context.method)]#Null:C1517)
-				$response:=$route[Lowercase:C14($context.method)]($context)
+				$response:=$route[Lowercase:C14($context.method)]($context;cs:C1710.Response.new())
 			End if 
 		Else 
-			$response:=$route.respond($context)
+			$response:=$route.respond($context;cs:C1710.Response.new())
 		End if 
 		
 		Case of 

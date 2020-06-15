@@ -96,7 +96,7 @@ Function popClone
 	C_OBJECT:C1216($0)
 	C_TEXT:C284($path)
 	$path:=This:C1470.relativeReference
-	
+	C_LONGINT:C283($pos)
 	$pos:=Position:C15("/";$path;2)
 	If ($pos>1)
 		$path:=Substring:C12($path;$pos)  // remove first path element

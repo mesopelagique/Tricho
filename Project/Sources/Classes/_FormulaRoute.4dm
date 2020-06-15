@@ -17,7 +17,7 @@ Function respond
 	$response:=This:C1470.formula
 	If (Value type:C1509($response)=Is object:K8:27)
 		If (OB Instance of:C1731($response;4D:C1709.Function))
-			$response:=$response.call(This:C1470;$1)
+			$response:=$response.call(This:C1470;$1;cs:C1710.Response.new())
 		End if 
 	End if 
 	
