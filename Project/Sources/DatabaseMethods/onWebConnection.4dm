@@ -1,5 +1,5 @@
 C_OBJECT:C1216($router)
-$router:=tricho .router()
+$router:=tricho.router()
 $router.get("/hello";"Hello world")
 $router.get("/hello/formula";Formula:C1597("Hello world by formula"))
 $router.all("/date/today";Formula:C1597(String:C10(Current date:C33)))
@@ -9,7 +9,7 @@ $router.get("/object/:id";Formula:C1597(New object:C1471("id";$1.params.id)))
 
 $router.get("/index/";Folder:C1567(fk database folder:K87:14).folder("WebFolder").file("index.html"))
 
-  // $router.get("/webfolder/:path";Formula(Folder(fk database folder).folder("WebFolder").folder($1.params.path)))
+// $router.get("/webfolder/:path";Formula(Folder(fk database folder).folder("WebFolder").folder($1.params.path)))
 
 $router.register(cs:C1710._TestRoute.new())
 
@@ -34,12 +34,15 @@ $router.all("/404HtmlD";Formula:C1597($2.status(200).download(Folder:C1567(fk re
 $router.all("/redirect";Formula:C1597($2.redirect("https://4d.com")))
 $router.all("/headerSup";Formula:C1597($2.send("created";201;New object:C1471("ID";Generate UUID:C1066))))
 
-$router.get("/format";Formula:C1597($2._format($1;New object:C1471(\
-"text/plain";Formula:C1597($2.send("hey"));\
+$router.get("/format";Formula:C1597($2.format($1;New object:C1471(\
+"text/plain";Formula:C1597($2.header("Content-type";"text/plain").send("hey"));\
 "text/html";Formula:C1597($2.send("<p>hey</p>"));\
 "application/json";Formula:C1597($2.send(New object:C1471("message";"hey")));\
+"application/xml";Formula:C1597($2.header("Content-type";"application/xml").send("<root></root>"));\
 "default";Formula:C1597($2.status(406).send("Not Acceptable"))\
 ))))
+
+$router.get("/textplain";"hey")
 
 $router.get("/routes";Formula:C1597(JSON Stringify:C1217($router)))
 

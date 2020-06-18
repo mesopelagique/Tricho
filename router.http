@@ -57,4 +57,9 @@ GET {{baseURL}}/format
 Accept: application/json
 ###
 GET {{baseURL}}/format
+Accept: application/xml
+###
+GET {{baseURL}}/format
+###
+GET {{baseURL}}/format
 Accept: text/plain

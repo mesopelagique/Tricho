@@ -8,7 +8,7 @@ Class constructor
 	This:C1470.headers:=$3
 	
 Function doSend
-	  // Manage headers (and code)
+	// Manage headers (and code)
 	If (This:C1470.headers=Null:C1517)
 		This:C1470.headers:=New object:C1471()
 	End if 
@@ -50,25 +50,25 @@ Function doSend
 		WEB SET HTTP HEADER:C660($headerFields;$headerValues)
 	End if 
 	
-	  // send data
+	// send data
 	Case of 
 		: (Value type:C1509(This:C1470.response)=Is text:K8:3)
 			WEB SEND TEXT:C677(This:C1470.response)
 		: (Value type:C1509(This:C1470.response)=Is object:K8:27)
 			Case of 
 				: (OB Instance of:C1731(This:C1470.response;cs:C1710.Response))
-					This:C1470.response.doSend()  // reponse in reponse
+					This:C1470.response.doSend()// reponse in reponse
 				: (OB Instance of:C1731(This:C1470.response;4D:C1709.File))
-					WebSendFile (This:C1470.response)
+					WebSendFile(This:C1470.response)
 /*: (OB Instance of(This.response;4D.Folder))
 WebSendFolderIndex(This.response)*/
 				Else 
-					WebSendObject (This:C1470.response)
+					WebSendObject(This:C1470.response)
 			End case 
 		: (Value type:C1509(This:C1470.response)=Is collection:K8:32)
-			WebSendObject (This:C1470.response)
+			WebSendObject(This:C1470.response)
 		Else 
-			  // TODO ERROR 404 ? if not return 404 is returned by 4d
+			// TODO ERROR 404 ? if not return 404 is returned by 4d
 	End case 
 	
 /******************
@@ -80,21 +80,21 @@ Function status
 	C_OBJECT:C1216($0)
 	C_LONGINT:C283($1)
 	This:C1470.code:=$1
-	$0:=This:C1470  // builder pattern
+	$0:=This:C1470// builder pattern
 	
 /* set the data to send */
 Function data
 	C_OBJECT:C1216($0)
 	C_VARIANT:C1683($1)
 	This:C1470.response:=$1
-	$0:=This:C1470  // builder pattern
+	$0:=This:C1470// builder pattern
 	
 /* set all headers as key/value object*/
 Function headers
 	C_OBJECT:C1216($0)
 	C_OBJECT:C1216($1)
 	This:C1470.headers:=$1
-	$0:=This:C1470  // builder pattern
+	$0:=This:C1470// builder pattern
 	
 /* set one header */
 Function header
@@ -104,7 +104,7 @@ Function header
 		This:C1470.headers:=New object:C1471()
 	End if 
 	This:C1470.headers[$1]:=$2
-	$0:=This:C1470  // builder pattern
+	$0:=This:C1470// builder pattern
 	
 /* add one cookie to send in headers */
 Function cookie
@@ -131,7 +131,7 @@ Function cookie
 /* just return the response without any change */
 Function end
 	C_OBJECT:C1216($0)
-	$0:=This:C1470  // builder pattern
+	$0:=This:C1470// builder pattern
 	
 /*
 send status with standard error message for the passed HTTP code
@@ -145,7 +145,7 @@ Function sendStatus
 	C_OBJECT:C1216($0)
 	C_LONGINT:C283($1)
 	This:C1470.status:=$1
-	This:C1470.response:=HTTPStatusCode [String:C10($1)]
+	This:C1470.response:=HTTPStatusCode[String:C10($1)]
 	$0:=This:C1470
 	
 Function attachment
@@ -154,16 +154,12 @@ Function attachment
 	If (Count parameters:C259>0)
 		This:C1470.header("Content-Disposition";"attachment; filename=\""+$1+"\"")
 		
-		  // This.header("Content-Type";"") // TODO content type according to file name extension
+		// This.header("Content-Type";"") // TODO content type according to file name extension
 		
 	Else 
 		This:C1470.header("Content-Disposition";"attachment")
 	End if 
 	$0:=This:C1470
-	
-/******************
-Factory functions
-******************/
 	
 /*
 response with http code: data, (code, headers)
@@ -171,9 +167,17 @@ response with http code: data, (code, headers)
 Function send
 	C_LONGINT:C283($2)
 	C_VARIANT:C1683($1)
-	C_OBJECT:C1216($3)  // optionnal
+	C_OBJECT:C1216($3)// optionnal
 	C_OBJECT:C1216($0)
-	$0:=cs:C1710.Response.new($1;$2;$3)
+	This:C1470.response:=$1
+	If (Count parameters:C259>1)
+		This:C1470.code:=$2
+		If (Count parameters:C259>2)
+			This:C1470.headers:=$3
+		End if 
+	End if 
+	$0:=This:C1470
+	
 	
 /*
 redirect to an url
@@ -181,8 +185,9 @@ redirect to an url
 Function redirect
 	C_OBJECT:C1216($0)
 	C_TEXT:C284($1)
-	  // XXX maybe copy data from headers
+	// XXX maybe copy data from headers
 	$0:=cs:C1710.ResponseRedirect.new($1)
+	
 	
 Function sendFile
 	C_OBJECT:C1216($0)
@@ -193,7 +198,7 @@ Function sendFile
 Function download
 	C_OBJECT:C1216($0)
 	C_OBJECT:C1216($1)
-	C_TEXT:C284($2)  //opt file name
+	C_TEXT:C284($2)//opt file name
 	If (Count parameters:C259>1)
 		$0:=cs:C1710.ResponseFile.new($1;This:C1470.code;This:C1470.headers).attachment($2)
 	Else 
@@ -204,8 +209,9 @@ Function download
 Function sendRawData
 	C_OBJECT:C1216($0)
 	C_TEXT:C284($1)
-	$0:=cs:C1710.ResponseRaw.new($1)  // WEB SEND RAW DATA (
+	$0:=cs:C1710.ResponseRaw.new($1)// WEB SEND RAW DATA (
 	
-Function _format
+/* According Accept header return a specific response by providing <context>=$1 and object <mimetype/response>*/
+Function format
 	C_OBJECT:C1216($0;$1;$2)
-	$0:=cs:C1710.ResponseFormat.new($1;$2;This:C1470)  // according to header, send a sub response. html, json; text; xml
+	$0:=cs:C1710.ResponseFormat.new($1;$2;This:C1470)// according to header, send a sub response. html, json; text; xml
