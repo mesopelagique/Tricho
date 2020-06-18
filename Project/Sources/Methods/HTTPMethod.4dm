@@ -1,5 +1,5 @@
 //%attributes = {}
-
+C_OBJECT:C1216($0)
 If (_HTTPMethod=Null:C1517)
 	_HTTPMethod:=New object:C1471(\
 		"GET";"GET";"POST";"POST";\

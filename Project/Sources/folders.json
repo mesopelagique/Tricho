@@ -16,12 +16,26 @@
 		]
 	},
 	"HTTP": {
-		"methods": [
-			"HTTPMethod"
+		"groups": [
+			"Request",
+			"Response"
 		],
+		"methods": [
+			"HTTPMethod",
+			"HTTPStatusCode"
+		]
+	},
+	"Request": {
 		"classes": [
-			"Context",
+			"Context"
+		]
+	},
+	"Response": {
+		"classes": [
 			"Response",
+			"ResponseFile",
+			"ResponseFormat",
+			"ResponseRaw",
 			"ResponseRedirect"
 		]
 	},

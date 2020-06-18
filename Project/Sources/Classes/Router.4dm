@@ -227,10 +227,10 @@ Function _handleContext
 	$context:=$1
 	C_OBJECT:C1216($route)
 	$route:=This:C1470._routeForContext($context)
-
+	
 	If ($route#Null:C1517)
 		$context.params:=This:C1470._extractParams($context.path;$route.path)  //OPTI: do it only if there is var in root
-		
+		$context.route:=$route
 		C_VARIANT:C1683($response)
 		If ($route.respond=Null:C1517)
 			If ($route[Lowercase:C14($context.method)]#Null:C1517)
@@ -248,7 +248,7 @@ Function _handleContext
 		End case 
 		
 		  // ASSERT(OB Instance of($response;cs.Response))
-		$response.send()
+		$response.doSend()
 		
 		$handled:=True:C214
 	End if 

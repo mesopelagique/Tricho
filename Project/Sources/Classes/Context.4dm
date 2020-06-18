@@ -37,7 +37,35 @@ See WEB GET HTTP HEADER.
 Function headers
 	  // alt: parse raw http if defined?
 	C_OBJECT:C1216($0)
-	$0:=WebGetHTTPHeaders 
+	If (This:C1470._headers=Null:C1517)
+		This:C1470._headers:=WebGetHTTPHeaders 
+	End if 
+	$0:=This:C1470._headers
+	
+Function hasHeader
+	C_TEXT:C284($1)
+	C_BOOLEAN:C305($0)
+	C_OBJECT:C1216($headers)
+	$headers:=This:C1470.headers()
+	$0:=($headers[$1]#Null:C1517) | ($headers[Lowercase:C14($1)]#Null:C1517)  // 4D seems to change case of headers....
+	
+Function header
+	C_TEXT:C284($1;$2)
+	C_VARIANT:C1683($0)
+	C_OBJECT:C1216($headers)
+	$headers:=This:C1470.headers()
+	$0:=$headers[$1]
+	Case of 
+		: ($0=Null:C1517)  // must not occur if string?
+			$0:=$headers[Lowercase:C14($1)]
+		: (Length:C16($0)=0)
+			$0:=$headers[Lowercase:C14($1)]
+	End case 
+	
+	  // Checks if the specified content types are acceptable, based on the request’s Accept HTTP header field. The method
+Function _accepts
+	C_BOOLEAN:C305($0)
+	$0:=True:C214  // TODO
 	
 Function bodyText
 	C_TEXT:C284($0;$request)
@@ -88,9 +116,17 @@ Function sessionID
 	C_TEXT:C284($0)
 	$0:=WEB Get current session ID:C1162
 	
-Function isSSLorTLS
+Function secure
 	C_BOOLEAN:C305($0)
 	$0:=WEB Is secured connection:C698
+	
+Function protocol
+	C_TEXT:C284($0)
+	$0:=Choose:C955(This:C1470.secure;"https";"http")
+	
+Function xhr
+	C_BOOLEAN:C305($0)
+	$0:=This:C1470.hasHeader("X-Requested-With")
 	
 Function popClone
 	C_OBJECT:C1216($0)

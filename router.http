@@ -40,3 +40,21 @@ GET {{baseURL}}/404
 GET {{baseURL}}/404JSON
 ###
 POST {{baseURL}}/headerSup
+
+###
+GET {{baseURL}}/404Image
+###
+GET {{baseURL}}/404ImageD
+###
+GET {{baseURL}}/404TextD
+###
+GET {{baseURL}}/404Html
+###
+GET {{baseURL}}/format
+Accept: text/html
+###
+GET {{baseURL}}/format
+Accept: application/json
+###
+GET {{baseURL}}/format
+Accept: text/plain
