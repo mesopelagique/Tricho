@@ -46,8 +46,9 @@ $router:=tricho.router()
 $router.get("/hello";"Hello world")
 ...
 ```
+> For test purpose you could create it at each client request but for efficiency in production mode cache it into a variable
 
-### Handle request
+### Handle the request
 
 In `On Web Connection` you could handle all request using code:
 
@@ -57,7 +58,7 @@ $router.handle($1;$2;$3;$4;$5;$6)
 
 ### Register routes
 
-#### Choose the HTTP method
+#### Choose the HTTP method to respond
 
 You can choose one http method(GET, POST, PUT, ...) or all methods
 
@@ -74,11 +75,13 @@ Last parameters is the data to return to the HTTP client.
 If you use a formula, 
 - the code could be dynamic ie. executed each times
 - you can call an other methods to manage response
-- you receive a context/request object with some useful features (to get headers, variables, ...)
+- you receive 
+  - as $1 a context/request object with some useful features (to get headers, variables, ...)
+  - as $2 a reponse builder to be able to change status code, provoque a file download, add headers/cookies, etc..
 
 If you return 
 - an object or a collection, it will be JSON stringifyed
-- a `File`, it will be send as blob (or according to file extension)
+- a `File`, it will be send as blob (with mime type according to file extension)
 
 #### Have parameters in route
 
