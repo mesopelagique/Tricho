@@ -1,6 +1,19 @@
 # Tricho 🕷
 
-Helpers functions for web
+[![language](https://img.shields.io/static/v1?label=language&message=4d&color=blue)](https://developer.4d.com/)
+[![language-top](https://img.shields.io/github/languages/top/mesopelagique/Tricho.svg)](https://developer.4d.com/)
+![code-size](https://img.shields.io/github/languages/code-size/mesopelagique/Tricho.svg)
+[![release](https://img.shields.io/github/v/release/mesopelagique/Tricho.svg)](https://github.com/mesopelagique/Tricho/releases/latest)
+[![license](https://img.shields.io/github/license/mesopelagique/Tricho)](LICENSE)
+
+Helpers functions for web development and a web router:
+
+```4d
+$router:=tricho.router() 
+$router.get("/hello";"Hello world")
+$router.post("/get";Formula($2.download("path/of/file"))
+...
+```
 
 ## Utility methods
 
@@ -29,7 +42,7 @@ Typically you provide the URL path, the HTTP method and the code to execute when
 ### Create the rooter and add "route(s)"
 
 ```4d
-$router:=tricho .router()
+$router:=tricho.router()
 $router.get("/hello";"Hello world")
 ...
 ```
