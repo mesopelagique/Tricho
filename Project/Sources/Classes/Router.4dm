@@ -1,39 +1,47 @@
 
 Class constructor
-	This:C1470.routes:=New object:C1471()
-	This:C1470.methods:=New collection:C1472()
-	This:C1470.errorHandlers:=New object:C1471()// errorcode: route
-	This:C1470.rootFolder:=Folder:C1567(fk resources folder:K87:11;*)// web root folder instead? (do not work with star)  
+	This:C1470.routes:=New object:C1471()// list of routes
+	This:C1470.errorHandlers:=New object:C1471()// errorcode: route (used for 404 for instance)
+	This:C1470.rootFolder:=Folder:C1567(fk resources folder:K87:11;*)// web root folder instead? (do not work with star)
+	This:C1470.strict:=False:C215// Enable strict routing. | Disabled by default, “/foo” and “/foo/” are treated the same by the router.
 	
+	This:C1470.methods:=New collection:C1472()// aggregate methods from routes
+	
+/* Respond to a GET request with matching path/$1 and return response produced by $2 */
 Function get
 	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.GET;$1;$2))
 	
+/* Respond to a POST request with matching path/$1 and return response produced by $2 */
 Function post
 	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.POST;$1;$2))
 	
+/* Respond to a GET or POST request with matching path/$1 and return response produced by $2 */
 Function getOrPost
 	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(New collection:C1472(HTTPMethod.GET;HTTPMethod.POST);$1;$2))
 	
+/* Respond to a DELETE request with matching path/$1 and return response produced by $2 */
 Function delete
 	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.DELETE;$1;$2))
 	
+/* Respond to a PUT request with matching path/$1 and return response produced by $2 */
 Function put
 	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.PUT;$1;$2))
 	
+/* Respond to a request with matching path/$1 and return response produced by $2 */
 Function all
 	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
-	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.ALL;$1;$2))
+	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.ALL;$1;$2))// XXX maybe not all, limit to ?
 	
 /*
 Register a route
@@ -49,7 +57,11 @@ Function register
 	End if 
 	
 	C_COLLECTION:C1488($routes)
-	$routes:=Split string:C1554($route;"/")
+	If (This:C1470.strict)
+		$routes:=Split string:C1554($route;"/")
+	Else 
+		$routes:=Split string:C1554($route;"/";sk ignore empty strings:K86:1)
+	End if 
 	C_TEXT:C284($method;$r)
 	
 	For each ($r;$routes)
@@ -155,8 +167,11 @@ Function _poolForContext
 	C_OBJECT:C1216($1)// context
 	
 	C_COLLECTION:C1488($paths)
-	$paths:=Split string:C1554($1.path;"/")
-	
+	If (This:C1470.strict)
+		$paths:=Split string:C1554($1.path;"/")
+	Else 
+		$paths:=Split string:C1554($1.path;"/";sk ignore empty strings:K86:1)
+	End if 
 	C_OBJECT:C1216($pool)
 	$pool:=This:C1470.routes
 	
