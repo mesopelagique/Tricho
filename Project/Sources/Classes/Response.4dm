@@ -197,7 +197,7 @@ Function sendFile
 /* Send a File but will downloaded */
 Function download
 	C_OBJECT:C1216($0)
-	C_OBJECT:C1216($1)
+	C_VARIANT:C1683($1)
 	C_TEXT:C284($2)//opt file name
 	If (Count parameters:C259>1)
 		$0:=cs:C1710.ResponseFile.new($1;This:C1470.code;This:C1470.headers).attachment($2)
@@ -209,7 +209,7 @@ Function download
 Function sendRawData
 	C_OBJECT:C1216($0)
 	C_TEXT:C284($1)
-	$0:=cs:C1710.ResponseRaw.new($1)// WEB SEND RAW DATA (
+	$0:=cs:C1710.ResponseRaw.new($1)
 	
 /* According Accept header return a specific response by providing <context>=$1 and object <mimetype/response>*/
 Function format

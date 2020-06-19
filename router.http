@@ -42,7 +42,7 @@ GET {{baseURL}}/404JSON
 POST {{baseURL}}/headerSup
 
 ###
-GET {{baseURL}}/404Image
+GET {{baseURL}}/404ImagePath
 ###
 GET {{baseURL}}/404ImageD
 ###
@@ -63,3 +63,7 @@ GET {{baseURL}}/format
 ###
 GET {{baseURL}}/format
 Accept: text/plain
+###
+GET {{baseURL}}/attachment
+###
+GET {{baseURL}}/router.http

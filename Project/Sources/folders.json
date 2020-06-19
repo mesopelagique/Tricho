@@ -41,6 +41,7 @@
 	},
 	"Router": {
 		"methods": [
+			"_new router test",
 			"test_router"
 		],
 		"classes": [

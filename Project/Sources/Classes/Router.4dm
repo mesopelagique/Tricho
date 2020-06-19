@@ -2,37 +2,38 @@
 Class constructor
 	This:C1470.routes:=New object:C1471()
 	This:C1470.methods:=New collection:C1472()
-	This:C1470.errorHandlers:=New object:C1471()  // errorcode: route
+	This:C1470.errorHandlers:=New object:C1471()// errorcode: route
+	This:C1470.rootFolder:=Folder:C1567(fk resources folder:K87:11;*)// web root folder instead? (do not work with star)  
 	
 Function get
-	C_TEXT:C284($1)  // path
+	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
-	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod .GET;$1;$2))
+	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.GET;$1;$2))
 	
 Function post
-	C_TEXT:C284($1)  // path
+	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
-	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod .POST;$1;$2))
+	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.POST;$1;$2))
 	
 Function getOrPost
-	C_TEXT:C284($1)  // path
+	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
-	This:C1470.register(cs:C1710._FormulaRoute.new(New collection:C1472(HTTPMethod .GET;HTTPMethod .POST);$1;$2))
+	This:C1470.register(cs:C1710._FormulaRoute.new(New collection:C1472(HTTPMethod.GET;HTTPMethod.POST);$1;$2))
 	
 Function delete
-	C_TEXT:C284($1)  // path
+	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
-	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod .DELETE;$1;$2))
+	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.DELETE;$1;$2))
 	
 Function put
-	C_TEXT:C284($1)  // path
+	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
-	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod .PUT;$1;$2))
+	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.PUT;$1;$2))
 	
 Function all
-	C_TEXT:C284($1)  // path
+	C_TEXT:C284($1)// path
 	C_VARIANT:C1683($2)
-	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod .ALL;$1;$2))
+	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.ALL;$1;$2))
 	
 /*
 Register a route
@@ -64,29 +65,29 @@ Function register
 	$methods:=$1.methods
 	If ($methods=Null:C1517)
 		If (OB Instance of:C1731($1.all;4D:C1709.Function))
-			$methods:=HTTPMethod .ALL  // XXX maybe do a copy to avoid change
+			$methods:=HTTPMethod.ALL// XXX maybe do a copy to avoid change
 		Else 
 			$methods:=New collection:C1472()
 			If (OB Instance of:C1731($1.get;4D:C1709.Function))
-				$methods.push(HTTPMethod .GET)
+				$methods.push(HTTPMethod.GET)
 			End if 
 			If (OB Instance of:C1731($1.post;4D:C1709.Function))
-				$methods.push(HTTPMethod .POST)
+				$methods.push(HTTPMethod.POST)
 			End if 
 			If (OB Instance of:C1731($1.put;4D:C1709.Function))
-				$methods.push(HTTPMethod .PUT)
+				$methods.push(HTTPMethod.PUT)
 			End if 
 			If (OB Instance of:C1731($1.delete;4D:C1709.Function))
-				$methods.push(HTTPMethod .DELETE)
+				$methods.push(HTTPMethod.DELETE)
 			End if 
 			If (OB Instance of:C1731($1.delete;4D:C1709.Function))
-				$methods.push(HTTPMethod .PATCH)
+				$methods.push(HTTPMethod.PATCH)
 			End if 
 			If (OB Instance of:C1731($1.head;4D:C1709.Function))
-				$methods.push(HTTPMethod .HEAD)
+				$methods.push(HTTPMethod.HEAD)
 			End if 
 			If (OB Instance of:C1731($1.options;4D:C1709.Function))
-				$methods.push(HTTPMethod .OPTIONS)
+				$methods.push(HTTPMethod.OPTIONS)
 			End if 
 		End if 
 		
@@ -110,7 +111,7 @@ Function unregister
 	If (Value type:C1509($1)=Is object:K8:27)
 		$route:=$1.path
 	Else 
-		$route:=String:C10($1)  // failed is not convertible
+		$route:=String:C10($1)// failed is not convertible
 	End if 
 	
 	If (Position:C15("/";$route)#1)
@@ -130,7 +131,7 @@ Function unregister
 		If ($pool[$r]#Null:C1517)
 			$pool:=$pool[$r]
 		Else 
-			$pool:=Null:C1517  // break
+			$pool:=Null:C1517// break
 		End if 
 	End for each 
 	
@@ -142,7 +143,7 @@ Function unregister
 			$methods:=$2
 		End if 
 		If ($methods=Null:C1517)
-			$methods:=HTTPMethod .ALL
+			$methods:=HTTPMethod.ALL
 		End if 
 		For each ($method;$methods)
 			OB REMOVE:C1226($pool;"__"+$method+"__")
@@ -150,8 +151,8 @@ Function unregister
 	End if 
 	
 Function _poolForContext
-	C_OBJECT:C1216($0)  // root
-	C_OBJECT:C1216($1)  // context
+	C_OBJECT:C1216($0)// root
+	C_OBJECT:C1216($1)// context
 	
 	C_COLLECTION:C1488($paths)
 	$paths:=Split string:C1554($1.path;"/")
@@ -164,9 +165,9 @@ Function _poolForContext
 		Case of 
 			: ($pool[$p]#Null:C1517)
 				$pool:=$pool[$p]
-			: ($pool[":"]#Null:C1517)  // manage var
+			: ($pool[":"]#Null:C1517)// manage var
 				$pool:=$pool[":"]
-			: (OB Instance of:C1731($pool["__"+$1.method+"__"];cs:C1710.Router))  // manage var
+			: (OB Instance of:C1731($pool["__"+$1.method+"__"];cs:C1710.Router))// manage var
 				$pool:=$pool["__"+$1.method+"__"]._poolForContext($1.popClone())
 			Else 
 				$pool:=Null:C1517
@@ -179,18 +180,18 @@ Function _poolForContext
 find a route according to context object
 */
 Function _routeForContext
-	C_OBJECT:C1216($0)  // root
-	C_OBJECT:C1216($1)  // context
+	C_OBJECT:C1216($0)// root
+	C_OBJECT:C1216($1)// context
 	C_OBJECT:C1216($pool)
 	$pool:=This:C1470._poolForContext($1)
 	
 	If ($pool#Null:C1517)
-		  //If ($pool["__"+$1.method+"__"]#Null)
+		//If ($pool["__"+$1.method+"__"]#Null)
 		$0:=$pool["__"+$1.method+"__"]
-		  //End if
+		//End if
 		
 	Else 
-		$0:=This:C1470.errorHandlers["404"]  // if no route, 404 handler if defined
+		$0:=This:C1470.errorHandlers["404"]// if no route, 404 handler if defined
 	End if 
 	
 /*
@@ -229,8 +230,9 @@ Function _handleContext
 	$route:=This:C1470._routeForContext($context)
 	
 	If ($route#Null:C1517)
-		$context.params:=This:C1470._extractParams($context.path;$route.path)  //OPTI: do it only if there is var in root
+		$context.params:=This:C1470._extractParams($context.path;$route.path)//OPTI: do it only if there is var in root
 		$context.route:=$route
+		$context.router:=This:C1470
 		C_VARIANT:C1683($response)
 		If ($route.respond=Null:C1517)
 			If ($route[Lowercase:C14($context.method)]#Null:C1517)
@@ -247,7 +249,8 @@ Function _handleContext
 				$response:=cs:C1710.Response.new($response)
 		End case 
 		
-		  // ASSERT(OB Instance of($response;cs.Response))
+		// ASSERT(OB Instance of($response;cs.Response))
+		$response.context:=$context
 		$response.doSend()
 		
 		$handled:=True:C214
@@ -271,7 +274,7 @@ Function _extractParams
 	$i:=0
 	For each ($el;$t2)
 		If (Position:C15(":";$el)=1)
-			$result[Substring:C12($el;2)]:=$t1[$i]  //TODO decodeURIComponent for extracted parameters
+			$result[Substring:C12($el;2)]:=$t1[$i]//TODO decodeURIComponent for extracted parameters
 		End if 
 		$i:=$i+1
 	End for each 
@@ -283,3 +286,8 @@ Function respond
 	C_OBJECT:C1216($1)
 	
 	$0:=This:C1470.handleContext($1.popClone())
+	
+Function restClientHTTP
+	C_TEXT:C284($0;$result)
+	$result:=JSON Stringify:C1217(This:C1470)// TODO convert to rest client format
+	$0:=$result
