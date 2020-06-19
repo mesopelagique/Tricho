@@ -54,11 +54,18 @@ $router.get("/textplain";"hey")
 
 $router.get("/router.http";Formula:C1597($2.status(200).attachment("router.http").send($router.restClientHTTP($1))))
 
-/*$childRooter:=tricho .router()
+C_OBJECT:C1216($childRooter)
+$childRooter:=tricho.router()
+$childRooter.get("/";" child?")
 $childRooter.get("/hello";"Hello child")
 $childRooter.get("/sub/hello";"Hello sub child")
+$childRooter.get("/testvar/:hello";Formula:C1597(String:C10($1.params.hello)))
 $childRooter.path:="/child"
 
 $router.register($childRooter)
-*/
+
+//$childRooter.get("/:thing";Formula($1.params.thing))
+//$router.use("/user/:thing"; $childRooter)
+
+
 $0:=$router

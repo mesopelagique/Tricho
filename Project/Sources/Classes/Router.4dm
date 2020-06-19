@@ -113,6 +113,13 @@ Function register
 		End if 
 	End for each 
 	
+/* register rooter with passed path */
+Function use
+	C_TEXT:C284($1)
+	C_OBJECT:C1216($2)
+	$2.path:=$1
+	This:C1470.register($2)
+	
 /*
 Unregister a route, using object(path, methods) or path
 */
@@ -172,7 +179,7 @@ Function _poolForContext
 	Else 
 		$paths:=Split string:C1554($1.path;"/";sk ignore empty strings:K86:1)
 	End if 
-	C_OBJECT:C1216($pool)
+	C_OBJECT:C1216($pool;$childPool)
 	$pool:=This:C1470.routes
 	
 	C_TEXT:C284($p)
@@ -183,11 +190,15 @@ Function _poolForContext
 			: ($pool[":"]#Null:C1517)// manage var
 				$pool:=$pool[":"]
 			: (OB Instance of:C1731($pool["__"+$1.method+"__"];cs:C1710.Router))// manage var
-				$pool:=$pool["__"+$1.method+"__"]._poolForContext($1.popClone())
+				$childPool:=$pool["__"+$1.method+"__"]._poolForContext($1.popClone())// Maybe break here
 			Else 
 				$pool:=Null:C1517
 		End case 
 	End for each 
+	
+	If ($childPool#Null:C1517)
+		$pool:=$childPool
+	End if 
 	
 	$0:=$pool
 	
@@ -233,7 +244,7 @@ Function handle
 	C_TEXT:C284($1;$2;$3;$4;$5;$6)
 	
 	C_OBJECT:C1216($context)
-	$context:=cs:C1710.Context.new($1;$2;$3;$4;$5;$6)
+	$context:=cs:C1710.Request.new($1;$2;$3;$4;$5;$6)
 	$0:=This:C1470._handleContext($context)
 	
 Function _handleContext
@@ -280,8 +291,14 @@ Function _extractParams
 	C_OBJECT:C1216($0;$result)
 	C_TEXT:C284($1;$2;$el)
 	C_COLLECTION:C1488($t1;$t2)
-	$t1:=Split string:C1554($1;"/")
-	$t2:=Split string:C1554($2;"/")
+	$t1:=Split string:C1554($1;"/";sk ignore empty strings:K86:1)
+	$t2:=Split string:C1554($2;"/";sk ignore empty strings:K86:1)
+	If ($t1.length>$t2.length)
+		// maybe sub rooter, inject missing path (maybe better its to receive a parameter to check or make extract in sub rooter)
+		While ($t1.length#$t2.length)
+			$t2.insert(0;"")
+		End while 
+	End if 
 	
 	$result:=New object:C1471()
 	
@@ -300,7 +317,7 @@ Function respond
 	C_VARIANT:C1683($0;$response)
 	C_OBJECT:C1216($1)
 	
-	$0:=This:C1470.handleContext($1.popClone())
+	$0:=This:C1470._handleContext($1.popClone())
 	
 Function restClientHTTP
 	C_TEXT:C284($0;$result)
@@ -311,6 +328,7 @@ Function restClientHTTP
 		+"@port="+String:C10($context.port())+"\n"\
 		+"@baseURL="+$context.protocol()+"://{{hostname}}:{{port}}\n\n"
 	
+	C_TEXT:C284($path)
 	For each ($path;This:C1470.routes)
 		$result:=$result+This:C1470._restClientHTTPR(This:C1470.routes[$path])+"\n"
 	End for each 
@@ -322,12 +340,15 @@ Function _restClientHTTPR
 	$result:=""
 	$route:=$1
 	If ($route.methods#Null:C1517)
+		C_TEXT:C284($method)
 		For each ($method;$route.methods)
 			$result:=$result+"###\n"
 			$result:=$result+$method+" {{baseURL}}"+$route.path+"\n"
 		End for each 
 	Else 
+		C_BOOLEAN:C305($done)
 		$done:=False:C215
+		C_TEXT:C284($path)
 		For each ($path;$route) Until ($done)
 			$result:=$result+This:C1470._restClientHTTPR($route[$path])
 			$done:=Position:C15("__";$path)=1// if indexed by method do only one times, les .methods do the job?
