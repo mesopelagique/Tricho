@@ -11,7 +11,7 @@ Helpers functions for web development and a web router:
 ```4d
 $router:=tricho.router() 
 $router.get("/hello";"Hello world")
-$router.post("/get";Formula($2.download("path/of/file"))
+$router.post("/create";Formula($2.status(201).download("path/of/file"))
 ...
 ```
 
