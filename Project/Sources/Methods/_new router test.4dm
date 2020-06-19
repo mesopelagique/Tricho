@@ -49,7 +49,7 @@ $router.get("/format";Formula:C1597($2.format($1;New object:C1471(\
 
 $router.get("/textplain";"hey")
 
-$router.get("/router.http";Formula:C1597($2.status(200).attachment("router.http").send($router.restClientHTTP())))
+$router.get("/router.http";Formula:C1597($2.status(200).attachment("router.http").send($router.restClientHTTP($1))))
 
 /*$childRooter:=tricho .router()
 $childRooter.get("/hello";"Hello child")

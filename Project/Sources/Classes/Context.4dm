@@ -1,6 +1,6 @@
 Class constructor
 	C_TEXT:C284($1;$2;$3;$4;$5;$6)
-	This:C1470.relativeReference:=$1  // https://tools.ietf.org/html/rfc3986#section-4.2
+	This:C1470.relativeReference:=$1// https://tools.ietf.org/html/rfc3986#section-4.2
 	If (Position:C15("?";This:C1470.relativeReference)>0)
 		This:C1470.path:=Substring:C12(This:C1470.relativeReference;1;Position:C15("?";This:C1470.relativeReference)-1)
 	Else 
@@ -28,17 +28,17 @@ See WEB GET VARIABLES.
 */
 Function variables
 	C_OBJECT:C1216($0)
-	$0:=WebGetVariables 
+	$0:=WebGetVariables
 	
 /*
 Return the http headers variables as object.
 See WEB GET HTTP HEADER.
 */
 Function headers
-	  // alt: parse raw http if defined?
+	// alt: parse raw http if defined?
 	C_OBJECT:C1216($0)
 	If (This:C1470._headers=Null:C1517)
-		This:C1470._headers:=WebGetHTTPHeaders 
+		This:C1470._headers:=WebGetHTTPHeaders
 	End if 
 	$0:=This:C1470._headers
 	
@@ -47,7 +47,7 @@ Function hasHeader
 	C_BOOLEAN:C305($0)
 	C_OBJECT:C1216($headers)
 	$headers:=This:C1470.headers()
-	$0:=($headers[$1]#Null:C1517) | ($headers[Lowercase:C14($1)]#Null:C1517)  // 4D seems to change case of headers....
+	$0:=($headers[$1]#Null:C1517) | ($headers[Lowercase:C14($1)]#Null:C1517)// 4D seems to change case of headers....
 	
 Function header
 	C_TEXT:C284($1;$2)
@@ -56,16 +56,16 @@ Function header
 	$headers:=This:C1470.headers()
 	$0:=$headers[$1]
 	Case of 
-		: ($0=Null:C1517)  // must not occur if string?
+		: ($0=Null:C1517)// must not occur if string?
 			$0:=$headers[Lowercase:C14($1)]
 		: (Length:C16($0)=0)
 			$0:=$headers[Lowercase:C14($1)]
 	End case 
 	
-	  // Checks if the specified content types are acceptable, based on the request’s Accept HTTP header field. The method
+	// Checks if the specified content types are acceptable, based on the request’s Accept HTTP header field. The method
 Function _accepts
 	C_BOOLEAN:C305($0)
-	$0:=True:C214  // TODO
+	$0:=True:C214// TODO
 	
 Function bodyText
 	C_TEXT:C284($0;$request)
@@ -89,7 +89,7 @@ Function bodyPart
 	C_BLOB:C604($vPartContentBlob)
 	C_LONGINT:C283($cpt)
 	$0:=New collection:C1472()
-	For ($cpt;1;WEB Get body part count:C1211)  //for each part
+	For ($cpt;1;WEB Get body part count:C1211)//for each part
 		WEB GET BODY PART:C1212($cpt;$vPartContentBlob;$vPartName;$vPartMimeType;$vPartFileName)
 		$0.push(New object:C1471("name";$vPartName;"content";$vPartContentBlob;"mimeType";$vPartMimeType;"filename";$vPartFileName))
 	End for 
@@ -99,7 +99,7 @@ Function bodyTextPart
 	C_TEXT:C284($vPartName;$vPartMimeType;$vPartFileName;$vDestinationFolder;$vPartContentText)
 	C_LONGINT:C283($cpt)
 	$0:=New collection:C1472()
-	For ($cpt;1;WEB Get body part count:C1211)  //for each part
+	For ($cpt;1;WEB Get body part count:C1211)//for each part
 		WEB GET BODY PART:C1212($cpt;$vPartContentText;$vPartName;$vPartMimeType;$vPartFileName)
 		$0.push(New object:C1471("name";$vPartName;"content";$vPartContentText;"mimeType";$vPartMimeType;"filename";$vPartFileName))
 	End for 
@@ -122,7 +122,13 @@ Function secure
 	
 Function protocol
 	C_TEXT:C284($0)
-	$0:=Choose:C955(This:C1470.secure;"https";"http")
+	$0:=Choose:C955(This:C1470.secure();"https";"http")
+	
+Function port
+	C_LONGINT:C283($0)
+	C_OBJECT:C1216($info)
+	$info:=WEB Get server info:C1531
+	$0:=Choose:C955(This:C1470.secure();$info.options.webHTTPSPortID;$info.options.webPortID)
 	
 Function xhr
 	C_BOOLEAN:C305($0)
@@ -135,7 +141,7 @@ Function popClone
 	C_LONGINT:C283($pos)
 	$pos:=Position:C15("/";$path;2)
 	If ($pos>1)
-		$path:=Substring:C12($path;$pos)  // remove first path element
+		$path:=Substring:C12($path;$pos)// remove first path element
 	End if 
 	
 	$0:=cs:C1710.Context.new($path;This:C1470.rawHTTP;This:C1470.client.ip;This:C1470.server.ip;This:C1470.basicAuth.username;This:C1470.basicAuth.password)

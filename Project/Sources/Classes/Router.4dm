@@ -289,5 +289,33 @@ Function respond
 	
 Function restClientHTTP
 	C_TEXT:C284($0;$result)
-	$result:=JSON Stringify:C1217(This:C1470)// TODO convert to rest client format
+	C_OBJECT:C1216($1;$context)
+	$context:=$1
+	
+	$result:="@hostname="+$context.server.ip+"\n"\
+		+"@port="+String:C10($context.port())+"\n"\
+		+"@baseURL="+$context.protocol()+"://{{hostname}}:{{port}}\n\n"
+	
+	For each ($path;This:C1470.routes)
+		$result:=$result+This:C1470._restClientHTTPR(This:C1470.routes[$path])+"\n"
+	End for each 
+	$0:=$result
+	
+Function _restClientHTTPR
+	C_OBJECT:C1216($1;$route)
+	C_TEXT:C284($0;$result)
+	$result:=""
+	$route:=$1
+	If ($route.methods#Null:C1517)
+		For each ($method;$route.methods)
+			$result:=$result+"###\n"
+			$result:=$result+$method+" {{baseURL}}"+$route.path+"\n"
+		End for each 
+	Else 
+		$done:=False:C215
+		For each ($path;$route) Until ($done)
+			$result:=$result+This:C1470._restClientHTTPR($route[$path])
+			$done:=Position:C15("__";$path)=1// if indexed by method do only one times, les .methods do the job?
+		End for each 
+	End if 
 	$0:=$result
