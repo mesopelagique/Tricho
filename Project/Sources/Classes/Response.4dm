@@ -215,3 +215,9 @@ Function sendRawData
 Function format
 	C_OBJECT:C1216($0;$1;$2)
 	$0:=cs:C1710.ResponseFormat.new($1;$2;This:C1470)// according to header, send a sub response. html, json; text; xml
+	
+/* proceed template file or text with passed data */
+Function render
+	C_VARIANT:C1683($1)
+	C_OBJECT:C1216($0;$2)
+	$0:=cs:C1710.ResponseTemplate.new($1/*file or text*/;This:C1470.code;This:C1470.headers;$2/*data*/)

@@ -1,4 +1,4 @@
-# Tricho 🕷
+﻿# Tricho 🕷
 
 [![language](https://img.shields.io/static/v1?label=language&message=4d&color=blue)](https://developer.4d.com/)
 [![language-top](https://img.shields.io/github/languages/top/mesopelagique/Tricho.svg)](https://developer.4d.com/)
@@ -12,6 +12,7 @@ Helpers functions for web development and a web router:
 $router:=tricho.router() 
 $router.get("/hello";"Hello world")
 $router.post("/create";Formula($2.status(201).download("path/of/file"))
+$router.get("/employee";Formula($2.render($templateFile;$employeeObject)))
 ...
 ```
 
@@ -46,6 +47,7 @@ $router:=tricho.router()
 $router.get("/hello";"Hello world")
 ...
 ```
+
 > For test purpose you could create it at each client request but for efficiency in production mode cache it into a variable
 
 ### Handle the request
@@ -72,14 +74,16 @@ $router.all("/hello";Formula("This is a "+$1.method))
 
 Last parameters is the data to return to the HTTP client.
 
-If you use a formula, 
+If you use a formula,
+
 - the code could be dynamic ie. executed each times
 - you can call an other methods to manage response
-- you receive 
+- you receive
   - as $1 a context/request object with some useful features (to get headers, variables, ...)
   - as $2 a reponse builder to be able to change status code, provoque a file download, add headers/cookies, etc..
 
-If you return 
+If you return
+
 - an object or a collection, it will be JSON stringifyed
 - a `File`, it will be send as blob (with mime type according to file extension)
 
@@ -105,27 +109,27 @@ The class must defined the `path` and `methods` attributes.
 
 ```4d
 Class constructor
-	This.methods:=New collection(HTTPMethod .GET)
-	This.path:="/a/class/path"
+  This.methods:=New collection(HTTPMethod .GET)
+  This.path:="/a/class/path"
 ```
 
 and must define a function to return the data.
 
 ```4d
 Function respond
-	C_VARIANT($0)
-	C_OBJECT($1) // $context
-	$0:="Hello" // Return a String, an Object(JSON), 4D.File...
+  C_VARIANT($0)
+  C_OBJECT($1) // $context
+  $0:="Hello" // Return a String, an Object(JSON), 4D.File...
 ```
 
 alteratively you can defined function by HTTP method if you do not defined `methods` attribute
 
 ```4d
 Function get
-	$0:="Hello"
+  $0:="Hello"
 
 Function post
-	$0:=New object("success";True)
+  $0:=New object("success";True)
 ```
 
 ## Handler
@@ -185,4 +189,3 @@ Router is inspired by numerous packages of different languages such as Flask for
 - Name come from [Trichobothria](https://en.m.wikipedia.org/wiki/Trichobothria)
 
 [<img src="https://mesopelagique.github.io/quatred.png" alt="mesopelagique"/>](https://mesopelagique.github.io/)
-

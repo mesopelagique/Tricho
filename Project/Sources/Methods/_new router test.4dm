@@ -51,6 +51,10 @@ $router.get("/format";Formula:C1597($2.format($1;New object:C1471(\
 ))))
 
 $router.get("/textplain";"hey")
+$router.get("/template";Formula:C1597($2.status(202).render("Name: <!--#4DEVAL $1.firstname --> <b><!--#4DEVAL $1.lastname --></b>";\
+New object:C1471("firstname";"eric";"lastname";"mesopelagique"))))
+$router.get("/template/file";Formula:C1597($2.status(202).render(Folder:C1567(fk resources folder:K87:11).file("template.html");\
+New object:C1471("firstname";"phimage";"lastname";"mesopelagique";"menu";New collection:C1472("Home";"Info";"Contact")))))
 
 $router.get("/router.http";Formula:C1597($2.status(200).attachment("router.http").send($router.restClientHTTP($1))))
 

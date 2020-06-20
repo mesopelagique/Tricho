@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="4">
+﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="5">
 	<com.4d>
 		<server>
 			<network>
@@ -13,5 +13,6 @@
 		<compiler>
 			<options compilation_path="3" symbol_file="false"/>
 		</compiler>
+		<general execute_host_database_event="true"/>
 	</com.4d>
 </preferences>

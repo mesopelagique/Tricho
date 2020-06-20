@@ -37,7 +37,8 @@
 			"ResponseFile",
 			"ResponseFormat",
 			"ResponseRaw",
-			"ResponseRedirect"
+			"ResponseRedirect",
+			"ResponseTemplate"
 		]
 	},
 	"Router": {
@@ -49,6 +50,11 @@
 			"_FormulaRoute",
 			"_TestRoute",
 			"Router"
+		]
+	},
+	"Template": {
+		"classes": [
+			"Template4DTag"
 		]
 	},
 	"Web": {
