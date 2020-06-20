@@ -137,8 +137,11 @@ Function unregister
 		$route:="/"+$route
 	End if 
 	C_COLLECTION:C1488($routes)
-	$routes:=Split string:C1554($route;"/")
-	
+	If (This:C1470.strict)
+		$routes:=Split string:C1554($route;"/")
+	Else 
+		$routes:=Split string:C1554($route;"/";sk ignore empty strings:K86:1)
+	End if 
 	C_OBJECT:C1216($pool)
 	$pool:=This:C1470.routes
 	C_TEXT:C284($method;$r)
