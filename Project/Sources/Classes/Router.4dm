@@ -1,47 +1,47 @@
 
 Class constructor
-	This:C1470.routes:=New object:C1471()// list of routes
-	This:C1470.errorHandlers:=New object:C1471()// errorcode: route (used for 404 for instance)
-	This:C1470.rootFolder:=Folder:C1567(fk resources folder:K87:11;*)// web root folder instead? (do not work with star)
-	This:C1470.strict:=False:C215// Enable strict routing. | Disabled by default, “/foo” and “/foo/” are treated the same by the router.
+	This:C1470.routes:=New object:C1471()  // list of routes
+	This:C1470.errorHandlers:=New object:C1471()  // errorcode: route (used for 404 for instance)
+	This:C1470.rootFolder:=Folder:C1567(fk resources folder:K87:11;*)  // web root folder instead? (do not work with star)
+	This:C1470.strict:=False:C215  // Enable strict routing. | Disabled by default, “/foo” and “/foo/” are treated the same by the router.
 	
-	This:C1470.methods:=New collection:C1472()// aggregate methods from routes
+	This:C1470.methods:=New collection:C1472()  // aggregate methods from routes
 	
 /* Respond to a GET request with matching path/$1 and return response produced by $2 */
 Function get
-	C_TEXT:C284($1)// path
+	C_TEXT:C284($1)  // path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.GET;$1;$2))
 	
 /* Respond to a POST request with matching path/$1 and return response produced by $2 */
 Function post
-	C_TEXT:C284($1)// path
+	C_TEXT:C284($1)  // path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.POST;$1;$2))
 	
 /* Respond to a GET or POST request with matching path/$1 and return response produced by $2 */
 Function getOrPost
-	C_TEXT:C284($1)// path
+	C_TEXT:C284($1)  // path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(New collection:C1472(HTTPMethod.GET;HTTPMethod.POST);$1;$2))
 	
 /* Respond to a DELETE request with matching path/$1 and return response produced by $2 */
 Function delete
-	C_TEXT:C284($1)// path
+	C_TEXT:C284($1)  // path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.DELETE;$1;$2))
 	
 /* Respond to a PUT request with matching path/$1 and return response produced by $2 */
 Function put
-	C_TEXT:C284($1)// path
+	C_TEXT:C284($1)  // path
 	C_VARIANT:C1683($2)
 	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.PUT;$1;$2))
 	
 /* Respond to a request with matching path/$1 and return response produced by $2 */
 Function all
-	C_TEXT:C284($1)// path
+	C_TEXT:C284($1)  // path
 	C_VARIANT:C1683($2)
-	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.ALL;$1;$2))// XXX maybe not all, limit to ?
+	This:C1470.register(cs:C1710._FormulaRoute.new(HTTPMethod.ALL;$1;$2))  // XXX maybe not all, limit to ?
 	
 /*
 Register a route
@@ -77,7 +77,7 @@ Function register
 	$methods:=$1.methods
 	If ($methods=Null:C1517)
 		If (OB Instance of:C1731($1.all;4D:C1709.Function))
-			$methods:=HTTPMethod.ALL// XXX maybe do a copy to avoid change
+			$methods:=HTTPMethod.ALL  // XXX maybe do a copy to avoid change
 		Else 
 			$methods:=New collection:C1472()
 			If (OB Instance of:C1731($1.get;4D:C1709.Function))
@@ -130,7 +130,7 @@ Function unregister
 	If (Value type:C1509($1)=Is object:K8:27)
 		$route:=$1.path
 	Else 
-		$route:=String:C10($1)// failed is not convertible
+		$route:=String:C10($1)  // failed is not convertible
 	End if 
 	
 	If (Position:C15("/";$route)#1)
@@ -153,7 +153,7 @@ Function unregister
 		If ($pool[$r]#Null:C1517)
 			$pool:=$pool[$r]
 		Else 
-			$pool:=Null:C1517// break
+			$pool:=Null:C1517  // break
 		End if 
 	End for each 
 	
@@ -173,8 +173,8 @@ Function unregister
 	End if 
 	
 Function _poolForContext
-	C_OBJECT:C1216($0)// root
-	C_OBJECT:C1216($1)// context
+	C_OBJECT:C1216($0)  // root
+	C_OBJECT:C1216($1)  // context
 	
 	C_COLLECTION:C1488($paths)
 	If (This:C1470.strict)
@@ -190,10 +190,10 @@ Function _poolForContext
 		Case of 
 			: ($pool[$p]#Null:C1517)
 				$pool:=$pool[$p]
-			: ($pool[":"]#Null:C1517)// manage var
+			: ($pool[":"]#Null:C1517)  // manage var
 				$pool:=$pool[":"]
-			: (OB Instance of:C1731($pool["__"+$1.method+"__"];cs:C1710.Router))// manage var
-				$childPool:=$pool["__"+$1.method+"__"]._poolForContext($1.popClone())// Maybe break here
+			: (OB Instance of:C1731($pool["__"+$1.method+"__"];cs:C1710.Router))  // manage var
+				$childPool:=$pool["__"+$1.method+"__"]._poolForContext($1.popClone())  // Maybe break here
 			Else 
 				$pool:=Null:C1517
 		End case 
@@ -209,8 +209,8 @@ Function _poolForContext
 find a route according to context object
 */
 Function _routeForContext
-	C_OBJECT:C1216($0)// root
-	C_OBJECT:C1216($1)// context
+	C_OBJECT:C1216($0)  // root
+	C_OBJECT:C1216($1)  // context
 	C_OBJECT:C1216($pool)
 	$pool:=This:C1470._poolForContext($1)
 	
@@ -220,7 +220,7 @@ Function _routeForContext
 		//End if
 		
 	Else 
-		$0:=This:C1470.errorHandlers["404"]// if no route, 404 handler if defined
+		$0:=This:C1470.errorHandlers["404"]  // if no route, 404 handler if defined
 	End if 
 	
 /*
@@ -246,9 +246,22 @@ Function handle
 	C_BOOLEAN:C305($0)
 	C_TEXT:C284($1;$2;$3;$4;$5;$6)
 	
-	C_OBJECT:C1216($context)
-	$context:=cs:C1710.Request.new($1;$2;$3;$4;$5;$6)
-	$0:=This:C1470._handleContext($context)
+	$handled:=False:C215
+	If (This:C1470.middleware#Null:C1517)
+		
+		$handled:=This:C1470.middleware.handle($1;$2;$3;$4;$5;$6)
+		
+	End if 
+	
+	If (Not:C34($handled))
+		
+		C_OBJECT:C1216($context)
+		$context:=cs:C1710.Request.new($1;$2;$3;$4;$5;$6)
+		$handled:=This:C1470._handleContext($context)
+		
+	End if 
+	
+	$0:=$handled
 	
 Function _handleContext
 	C_BOOLEAN:C305($0;$handled)
@@ -259,7 +272,7 @@ Function _handleContext
 	$route:=This:C1470._routeForContext($context)
 	
 	If ($route#Null:C1517)
-		$context.params:=This:C1470._extractParams($context.path;$route.path)//OPTI: do it only if there is var in root
+		$context.params:=This:C1470._extractParams($context.path;$route.path)  //OPTI: do it only if there is var in root
 		$context.route:=$route
 		$context.router:=This:C1470
 		C_VARIANT:C1683($response)
@@ -309,7 +322,7 @@ Function _extractParams
 	$i:=0
 	For each ($el;$t2)
 		If (Position:C15(":";$el)=1)
-			$result[Substring:C12($el;2)]:=$t1[$i]//TODO decodeURIComponent for extracted parameters
+			$result[Substring:C12($el;2)]:=$t1[$i]  //TODO decodeURIComponent for extracted parameters
 		End if 
 		$i:=$i+1
 	End for each 
@@ -354,7 +367,7 @@ Function _restClientHTTPR
 		C_TEXT:C284($path)
 		For each ($path;$route) Until ($done)
 			$result:=$result+This:C1470._restClientHTTPR($route[$path])
-			$done:=Position:C15("__";$path)=1// if indexed by method do only one times, les .methods do the job?
+			$done:=Position:C15("__";$path)=1  // if indexed by method do only one times, les .methods do the job?
 		End for each 
 	End if 
 	$0:=$result

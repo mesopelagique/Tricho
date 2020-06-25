@@ -67,3 +67,31 @@ Accept: text/plain
 GET {{baseURL}}/attachment
 ###
 GET {{baseURL}}/router.http
+
+###
+GET {{baseURL}}/choose
+###
+GET {{baseURL}}/choose
+odd: 1
+
+###
+GET {{baseURL}}/chooseNum
+###
+GET {{baseURL}}/chooseNum
+odd: 1
+###
+GET {{baseURL}}/chooseNum
+odd: 2
+
+###
+GET {{baseURL}}/basicAuth
+Authorization: Basic QWxhZGRpbjpPcGVuU2VzYW1l
+###
+GET {{baseURL}}/tokenAuth
+Authorization: Token QWxhZGRpbjpPcGVuU2VzYW1l
+
+###
+GET {{baseURL}}/basicSecure
+Authorization: Basic QWxhZGRpbjpPcGVuU2VzYW1l
+###
+GET {{baseURL}}/basicSecure

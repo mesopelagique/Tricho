@@ -1,26 +1,27 @@
 Class extends Response
 
 Class constructor
-	C_OBJECT:C1216($1)
-	C_OBJECT:C1216($2)
+	C_VARIANT:C1683($1)
+	C_COLLECTION:C1488($2)
+	C_OBJECT:C1216($3)
 	Super:C1705()
-	This:C1470.responses:=$1
-	This:C1470.builder:=$2
+	This:C1470.criterion:=$1
+	This:C1470.responses:=$2
+	This:C1470.builder:=$3
 	
 Function doSend  //override
-	C_TEXT:C284($format)
-	$format:=This:C1470.context.header("Accept")
-	
 	C_VARIANT:C1683($response)
-	If (Length:C16(String:C10($format))>0)
-		
-		$response:=This:C1470.responses[$format]  // maybe do a search to find more appropriate one to be less restrictive (like text for text/plain , html for text/html)
-		
-	End if 
 	
-	If ($response=Null:C1517)
-		$response:=This:C1470.responses["default"]  // maybe a default one
-	End if 
+	Case of 
+		: (Value type:C1509(This:C1470.criterion)=Is boolean:K8:9)
+			
+			$response:=Choose:C955(Bool:C1537(This:C1470.criterion);This:C1470.responses[0];This:C1470.responses[1])
+			
+		Else   // expected num, let failed if not
+			
+			$response:=This:C1470.responses[Num:C11(This:C1470.criterion)]
+			
+	End case 
 	
 	Case of 
 		: (Value type:C1509($response)#Is object:K8:27)

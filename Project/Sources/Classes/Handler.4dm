@@ -3,7 +3,7 @@ The handler allow to register web handler to respond to request.
 The first which return True will respond.
 */
 Class constructor
-	  // handlers
+	// handlers
 	This:C1470.handlers:=New collection:C1472()
 	
 Function register
@@ -21,7 +21,7 @@ Function handle
 	C_TEXT:C284($1;$2;$3;$4;$5;$6)
 	
 	C_OBJECT:C1216($context)
-	$context:=cs:C1710.Context.new($1;$2;$3;$4;$5;$6)
+	$context:=cs:C1710.Response.new($1;$2;$3;$4;$5;$6)
 	
 	$handled:=False:C215
 	C_OBJECT:C1216($handler)

@@ -51,13 +51,15 @@ Function doSend
 	End if 
 	
 	// send data
+	C_LONGINT:C283($dataType)
+	$dataType:=Value type:C1509(This:C1470.response)
 	Case of 
-		: (Value type:C1509(This:C1470.response)=Is text:K8:3)
+		: ($dataType=Is text:K8:3)
 			WEB SEND TEXT:C677(This:C1470.response)
 		: (Value type:C1509(This:C1470.response)=Is object:K8:27)
 			Case of 
 				: (OB Instance of:C1731(This:C1470.response;cs:C1710.Response))
-					This:C1470.response.doSend()// reponse in reponse
+					This:C1470.response.doSend()  // reponse in reponse
 				: (OB Instance of:C1731(This:C1470.response;4D:C1709.File))
 					WebSendFile(This:C1470.response)
 /*: (OB Instance of(This.response;4D.Folder))
@@ -65,8 +67,10 @@ WebSendFolderIndex(This.response)*/
 				Else 
 					WebSendObject(This:C1470.response)
 			End case 
-		: (Value type:C1509(This:C1470.response)=Is collection:K8:32)
+		: ($dataType=Is collection:K8:32)
 			WebSendObject(This:C1470.response)
+		: ($dataType=Is real:K8:4) | ($dataType=Is longint:K8:6) | ($dataType=Is boolean:K8:9) | ($dataType=Is integer:K8:5)
+			WEB SEND TEXT:C677(String:C10(This:C1470.response))
 		Else 
 			// TODO ERROR 404 ? if not return 404 is returned by 4d
 	End case 
@@ -80,21 +84,21 @@ Function status
 	C_OBJECT:C1216($0)
 	C_LONGINT:C283($1)
 	This:C1470.code:=$1
-	$0:=This:C1470// builder pattern
+	$0:=This:C1470  // builder pattern
 	
 /* set the data to send */
 Function data
 	C_OBJECT:C1216($0)
 	C_VARIANT:C1683($1)
 	This:C1470.response:=$1
-	$0:=This:C1470// builder pattern
+	$0:=This:C1470  // builder pattern
 	
 /* set all headers as key/value object*/
 Function headers
 	C_OBJECT:C1216($0)
 	C_OBJECT:C1216($1)
 	This:C1470.headers:=$1
-	$0:=This:C1470// builder pattern
+	$0:=This:C1470  // builder pattern
 	
 /* set one header */
 Function header
@@ -104,7 +108,7 @@ Function header
 		This:C1470.headers:=New object:C1471()
 	End if 
 	This:C1470.headers[$1]:=$2
-	$0:=This:C1470// builder pattern
+	$0:=This:C1470  // builder pattern
 	
 /* add one cookie to send in headers */
 Function cookie
@@ -131,7 +135,7 @@ Function cookie
 /* just return the response without any change */
 Function end
 	C_OBJECT:C1216($0)
-	$0:=This:C1470// builder pattern
+	$0:=This:C1470  // builder pattern
 	
 /*
 send status with standard error message for the passed HTTP code
@@ -144,7 +148,7 @@ $2.sendStatus(500)  // equivalent to $2.status(500).send('Internal Server Error'
 Function sendStatus
 	C_OBJECT:C1216($0)
 	C_LONGINT:C283($1)
-	This:C1470.status:=$1
+	This:C1470.code:=$1
 	This:C1470.response:=HTTPStatusCode[String:C10($1)]
 	$0:=This:C1470
 	
@@ -167,7 +171,7 @@ response with http code: data, (code, headers)
 Function send
 	C_LONGINT:C283($2)
 	C_VARIANT:C1683($1)
-	C_OBJECT:C1216($3)// optionnal
+	C_OBJECT:C1216($3)  // optionnal
 	C_OBJECT:C1216($0)
 	This:C1470.response:=$1
 	If (Count parameters:C259>1)
@@ -198,7 +202,7 @@ Function sendFile
 Function download
 	C_OBJECT:C1216($0)
 	C_VARIANT:C1683($1)
-	C_TEXT:C284($2)//opt file name
+	C_TEXT:C284($2)  //opt file name
 	If (Count parameters:C259>1)
 		$0:=cs:C1710.ResponseFile.new($1;This:C1470.code;This:C1470.headers).attachment($2)
 	Else 
@@ -213,8 +217,22 @@ Function sendRawData
 	
 /* According Accept header return a specific response by providing <context>=$1 and object <mimetype/response>*/
 Function format
-	C_OBJECT:C1216($0;$1;$2)
-	$0:=cs:C1710.ResponseFormat.new($1;$2;This:C1470)// according to header, send a sub response. html, json; text; xml
+	C_OBJECT:C1216($0;$1)
+	$0:=cs:C1710.ResponseFormat.new($1;This:C1470)  // according to header, send a sub response. html, json; text; xml
+	
+/* choose a response according to a criteria */
+Function choose
+	C_OBJECT:C1216($0)
+	C_VARIANT:C1683($1)  // bool or int
+	C_VARIANT:C1683(${2})
+	
+	C_COLLECTION:C1488($responses)
+	$responses:=New collection:C1472()
+	C_LONGINT:C283($cpt)
+	For ($cpt;2;Count parameters:C259;1)
+		$responses.push(${$cpt})
+	End for 
+	$0:=cs:C1710.ResponseChoose.new($1;$responses;This:C1470)  // according to passed condition return the response
 	
 /* proceed template file or text with passed data */
 Function render

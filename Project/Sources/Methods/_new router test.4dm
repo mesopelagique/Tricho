@@ -42,13 +42,25 @@ $router.all("/attachment";Formula:C1597($2.status(200).attachment("a.txt").send(
 $router.all("/redirect";Formula:C1597($2.redirect("https://4d.com")))
 $router.all("/headerSup";Formula:C1597($2.send("created";201;New object:C1471("ID";Generate UUID:C1066))))
 
-$router.get("/format";Formula:C1597($2.format($1;New object:C1471(\
+$router.get("/format";Formula:C1597($2.format(New object:C1471(\
 "text/plain";Formula:C1597($2.header("Content-type";"text/plain").send("hey"));\
 "text/html";Formula:C1597($2.send("<p>hey</p>"));\
 "application/json";Formula:C1597($2.send(New object:C1471("message";"hey")));\
 "application/xml";Formula:C1597($2.header("Content-type";"application/xml").send("<root></root>"));\
 "default";Formula:C1597($2.status(406).send("Not Acceptable"))\
 ))))
+
+$router.get("/choose";Formula:C1597($2.choose(Bool:C1537(Num:C11($1.header("odd")));\
+Formula:C1597($2.status(200).send("2"));1)))
+
+$router.get("/chooseNum";Formula:C1597($2.choose(Num:C11($1.header("odd"));\
+Formula:C1597($2.status(200).send("2"));1;2)))
+
+
+$router.all("/basicAuth";Formula:C1597("User is "+JSON Stringify:C1217($1.authBasic())))
+$router.all("/tokenAuth";Formula:C1597("token is "+JSON Stringify:C1217($1.authBearer())))
+
+$router.get("/basicSecure";Formula:C1597($2.choose(((String:C10($1.authBasic().username)="Aladdin") & (String:C10($1.authBasic().password)="OpenSesame"));"ok authentified";Formula:C1597($2.sendStatus(403)))))
 
 $router.get("/textplain";"hey")
 $router.get("/template";Formula:C1597($2.status(202).render("Name: <!--#4DEVAL $1.firstname --> <b><!--#4DEVAL $1.lastname --></b>";\
@@ -71,5 +83,8 @@ $router.register($childRooter)
 //$childRooter.get("/:thing";Formula($1.params.thing))
 //$router.use("/user/:thing"; $childRooter)
 
+//$handler:=tricho.handler()
+//$handler.register(Formula(OB Instance of($1;cs.File)))
+//$router.middleware:=$handler
 
 $0:=$router
